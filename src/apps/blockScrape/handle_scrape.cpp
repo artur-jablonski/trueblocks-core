@@ -60,6 +60,7 @@ bool COptions::scrape_blocks(void) {
         return false;
     }
 
+    LOG_WARN("DEBUG: getLastFileInFolder");
     string_q stageFn = getLastFileInFolder(indexFolder_staging, false);
     prev_block = path_2_Bn(stageFn);
     nRecsThen = fileSize(stageFn) / asciiAppearanceSize;
@@ -79,6 +80,7 @@ bool COptions::scrape_blocks(void) {
     report();
     if (nRecsNow <= apps_per_chunk)
         return true;
+    LOG_WARN("DEBUG: about to write chunks yo!");
     return write_chunks(apps_per_chunk, false /* snapped */);
 }
 
@@ -129,6 +131,7 @@ bool copyRipeToStage(const string_q& path, void* data) {
 
 //---------------------------------------------------------------------------------------------------
 bool COptions::write_chunks(blknum_t chunkSize, bool snapped) {
+    LOG_WARN("DEBUG: inside write_chunks ", newStage);
     blknum_t nRecords = fileSize(newStage) / asciiAppearanceSize;
     while ((snapped || nRecords > chunkSize) && !shouldQuit()) {
         lockSection();
