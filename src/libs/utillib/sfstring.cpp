@@ -36,12 +36,11 @@ string_q nextTokenClear(string_q& line, char delim, bool doClear) {
 size_t explode(CStringArray& result, const string& input, char needle, bool trim) {
     std::cerr << "DEBUG: explode-0\n";
     result.reserve(result.size() + countOf(input, needle) + 1);  // maybe an append
-    std::cerr << "DEBUG: explode-1\n";
+    std::cerr << "DEBUG: explode-1\n" + (countOf(input, needle) + 1);
 
 
     string_q buffer{""};
     for (auto ch : input) {
-        cerr << "DEBUG: explode-2\n";
 
         if (ch != needle) {
             buffer += ch;
