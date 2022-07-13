@@ -34,13 +34,14 @@ string_q nextTokenClear(string_q& line, char delim, bool doClear) {
 
 //--------------------------------------------------------------------------------
 size_t explode(CStringArray& result, const string& input, char needle, bool trim) {
-    LOG_WARN("DEBUG: explode-0");
+    std::cerr << "DEBUG: explode-0\n";
     result.reserve(result.size() + countOf(input, needle) + 1);  // maybe an append
-    LOG_WARN("DEBUG: explode-1");
+    std::cerr << "DEBUG: explode-1\n";
+
 
     string_q buffer{""};
     for (auto ch : input) {
-        LOG_WARN("DEBUG: explode-2");
+        cerr << "DEBUG: explode-2\n";
 
         if (ch != needle) {
             buffer += ch;
@@ -52,12 +53,12 @@ size_t explode(CStringArray& result, const string& input, char needle, bool trim
             buffer = "";
         }
     }
-    LOG_WARN("DEBUG: explode-3");
+    std::cerr << "DEBUG: explode-3\n";
 
 
     if (buffer != "")
         result.push_back(buffer);
-    LOG_WARN("DEBUG: explode-4");
+    std::cerr << "DEBUG: explode-4\n";
 
     return result.size();
 }
