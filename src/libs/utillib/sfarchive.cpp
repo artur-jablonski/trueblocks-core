@@ -328,6 +328,7 @@ size_t asciiFileToString(const string_q& fileName, string_q& contents) {
     asciiFileToBuffer(fileName, buffer);
     LOG_WARN("DEBUG: 5-0.0.1 ", fileName);
     buffer.push_back('\0');  // not sure if this is needed or not. At worse it's redundant
+    LOG_WARN("DEBUG: 5-0.0.2 ", fileName);
     contents = buffer.data();
     return contents.size();
 }
@@ -336,7 +337,9 @@ size_t asciiFileToString(const string_q& fileName, string_q& contents) {
 size_t asciiFileToLines(const string_q& fileName, CStringArray& lines) {
     string_q contents;
     asciiFileToString(fileName, contents);
+    LOG_WARN("DEBUG: 5-XX-0");
     explode(lines, contents, '\n');
+    LOG_WARN("DEBUG: 5-XX-1");
     return lines.size();
 }
 
