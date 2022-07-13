@@ -120,6 +120,7 @@ bool CSharedResource::ReLock(const string_q& mode) {
 bool CSharedResource::Lock(const string_q& fn, const string_q& mode, size_t lockType) {
     ASSERT(!isOpen());
 
+    LOG_WARN("DEBUG: 5-3-1", fn, mode, lockType);
     m_filename = fn;
     m_mode = mode;
     m_fp = NULL;
@@ -132,6 +133,11 @@ bool CSharedResource::Lock(const string_q& fn, const string_q& mode, size_t lock
         m_errorMsg = "File does not exist: " + m_filename;
         return false;
     }
+
+    LOG_WARN("DEBUG: 5-3-2");
+
+
+
 
     bool openIt = true;
     if (m_mode == modeReadOnly) {
@@ -157,7 +163,11 @@ bool CSharedResource::Lock(const string_q& fn, const string_q& mode, size_t lock
     }
 
     if (openIt) {
+        LOG_WARN("DEBUG: 5-3-3", m_filename.c_str(), m_mode.c_str());
         m_fp = fopen(m_filename.c_str(), m_mode.c_str());  // operator on event database
+        if(m_fp == NULL)
+            LOG_WARN("DEBUG 5-3-4", strerror(errno));
+
     }
 
     return isOpen();

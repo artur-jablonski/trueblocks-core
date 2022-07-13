@@ -305,12 +305,18 @@ bool forEveryLineInAsciiFile(const string_q& filenameIn, CHARPTRFUNC func, void*
 
 //----------------------------------------------------------------------
 size_t asciiFileToBuffer(const string_q& fileName, vector<char>& buffer) {
+    LOG_WARN("DEBUG: 5-1 ", fileName);
     size_t len = fileSize(fileName);
+    LOG_WARN("DEBUG: 5-2 ", len);
     buffer.resize(len);
     CArchive archive(READING_ARCHIVE);
+    LOG_WARN("DEBUG: 5-3 ");
     if (archive.Lock(fileName, modeReadOnly, LOCK_NOWAIT)) {
+        LOG_WARN("DEBUG: 5-4");
         archive.Read(buffer.data(), len, 1);
+        LOG_WARN("DEBUG: 5-5");
         archive.Release();
+        LOG_WARN("DEBUG: 5-6");
     }
     return buffer.size();
 }
