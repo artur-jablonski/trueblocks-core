@@ -72,15 +72,16 @@ bool COptions::scrape_blocks(void) {
         return false;
     }
     tmpStagingStream.close();
-
+    LOG_WARN("DEBUG: 0");
     if (!stage_chunks(tmpStagingFn))
         return false;
+    LOG_WARN("DEBUG: 1");
     if (!isTestMode())
         freshenTimestamps(blaze_start + block_cnt);
     report();
     if (nRecsNow <= apps_per_chunk)
         return true;
-    LOG_WARN("DEBUG: about to write chunks yo!");
+    LOG_WARN("DEBUG: 2");
     return write_chunks(apps_per_chunk, false /* snapped */);
 }
 
@@ -133,13 +134,16 @@ bool copyRipeToStage(const string_q& path, void* data) {
 bool COptions::write_chunks(blknum_t chunkSize, bool snapped) {
     LOG_WARN("DEBUG: inside write_chunks ", newStage);
     blknum_t nRecords = fileSize(newStage) / asciiAppearanceSize;
+    LOG_WARN("DEBUG: 4");
     while ((snapped || nRecords > chunkSize) && !shouldQuit()) {
         lockSection();
+        LOG_WARN("DEBUG: 5");
 
         CStringArray lines;
         lines.reserve(nRecords + 100);
         asciiFileToLines(newStage, lines);
 
+        LOG_WARN("DEBUG: 6");
         string_q prvBlock;
         size_t loc = NOPOS;
         for (uint64_t record = (chunkSize - 1); record < lines.size() && loc == NOPOS; record++) {
@@ -151,14 +155,18 @@ bool COptions::write_chunks(blknum_t chunkSize, bool snapped) {
                 prvBlock = pParts[1];
             }
         }
+        LOG_WARN("DEBUG: 7");
 
         if (loc == NOPOS) {
             loc = lines.size() ? lines.size() - 1 : 0;
         }
+        LOG_WARN("DEBUG: 8");
 
         CStringArray remainingLines;
         remainingLines.reserve(chunkSize + 100);
+        LOG_WARN("DEBUG: 9");
         if (lines.size() > 0) {
+            LOG_WARN("DEBUG: 10");
             CStringArray consolidatedLines;
             consolidatedLines.reserve(lines.size());
             for (uint64_t record = 0; record <= loc; record++) {
@@ -171,8 +179,10 @@ bool COptions::write_chunks(blknum_t chunkSize, bool snapped) {
                 }
                 consolidatedLines.push_back(lines[record]);
             }
+            LOG_WARN("DEBUG: 11");
 
             if (consolidatedLines.size() > 0) {
+                LOG_WARN("DEBUG: 12");
                 CStringArray p1;
                 explode(p1, consolidatedLines[0], '\t');
                 CStringArray p2;
@@ -198,11 +208,14 @@ bool COptions::write_chunks(blknum_t chunkSize, bool snapped) {
 
                 ::remove(newStage.c_str());
             }
+            LOG_WARN("DEBUG: 13");
         }
+        LOG_WARN("DEBUG: 14");
 
         if (remainingLines.size()) {
             linesToAsciiFile(newStage, remainingLines);
         }
+        LOG_WARN("DEBUG: 15");
         unlockSection();
 
         nRecords = fileSize(newStage) / asciiAppearanceSize;
@@ -210,6 +223,7 @@ bool COptions::write_chunks(blknum_t chunkSize, bool snapped) {
             snapped = nRecords > 0;
         chunkSize = min(apps_per_chunk, nRecords);
     }
+    LOG_WARN("DEBUG: 16");
 
     return !shouldQuit();
 }
