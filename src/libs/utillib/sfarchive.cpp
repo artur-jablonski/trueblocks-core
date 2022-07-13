@@ -324,7 +324,9 @@ size_t asciiFileToBuffer(const string_q& fileName, vector<char>& buffer) {
 //----------------------------------------------------------------------
 size_t asciiFileToString(const string_q& fileName, string_q& contents) {
     vector<char> buffer;
+    LOG_WARN("DEBUG: 5-0.0.0 ", fileName);
     asciiFileToBuffer(fileName, buffer);
+    LOG_WARN("DEBUG: 5-0.0.1 ", fileName);
     buffer.push_back('\0');  // not sure if this is needed or not. At worse it's redundant
     contents = buffer.data();
     return contents.size();
@@ -340,8 +342,10 @@ size_t asciiFileToLines(const string_q& fileName, CStringArray& lines) {
 
 //----------------------------------------------------------------------
 size_t asciiFileToLines(const string_q& fileName, CUintArray& lines) {
+    LOG_WARN("DEBUG: 5-0.0", fileName);
     string_q contents;
     asciiFileToString(fileName, contents);
+    LOG_WARN("DEBUG: 5-0.1 ");
     explode(lines, contents, '\n');
     return lines.size();
 }

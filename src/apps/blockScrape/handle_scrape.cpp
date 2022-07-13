@@ -140,7 +140,10 @@ bool COptions::write_chunks(blknum_t chunkSize, bool snapped) {
         LOG_WARN("DEBUG: 5");
 
         CStringArray lines;
+        LOG_WARN("DEBUG: 5a");
+
         lines.reserve(nRecords + 100);
+        LOG_WARN("DEBUG: 5b");
         asciiFileToLines(newStage, lines);
 
         LOG_WARN("DEBUG: 6");
